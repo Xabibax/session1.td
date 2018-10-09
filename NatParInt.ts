@@ -1,5 +1,6 @@
 // En construction //
 import { Nat } from './Nat';
+import { Zero } from './Zero';
 import { FabriqueNat } from './FabriqueNat';
 
 export class NatParInt implements Nat {
@@ -19,7 +20,7 @@ export class NatParInt implements Nat {
 		return new NatParInt(x);
 	}
 	creerZero(): Nat{
-        return NatParInt.FAB.creerNatAvecValeur(0);
+        return Zero.FAB.creerZero();
 	}
 	creerSuccesseur(arg: Nat): Nat{
         return NatParInt.FAB.creerNatAvecValeur(this.somme(this.un()).val());

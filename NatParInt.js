@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+var Zero_1 = require("./Zero");
 var NatParInt = /** @class */ (function () {
     // Constructeur //
     function NatParInt(i) {
@@ -12,7 +13,7 @@ var NatParInt = /** @class */ (function () {
         return new NatParInt(x);
     };
     NatParInt.prototype.creerZero = function () {
-        return NatParInt.FAB.creerNatAvecValeur(0);
+        return Zero_1.Zero.FAB.creerZero();
     };
     NatParInt.prototype.creerSuccesseur = function (arg) {
         return NatParInt.FAB.creerNatAvecValeur(this.somme(this.un()).val());
