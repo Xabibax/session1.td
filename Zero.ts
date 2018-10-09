@@ -1,4 +1,5 @@
 import { Nat } from "./Nat";
+import { Succ } from "./Succ";
 import { FabriqueNat } from './FabriqueNat';
 import { NatParInt } from './NatParInt';
 
@@ -27,16 +28,17 @@ export class Zero implements Nat{
         return 1;
     }
     creerNatAvecRepresentation(chiffres: string): Nat{
-        return Zero.FAB.creerZero();
+        return NatParInt.FAB.creerNatAvecRepresentation(chiffres);
     }
     creerNatAvecValeur(x: number): Nat{
-        return Zero.FAB.creerZero();
+        return NatParInt.FAB.creerNatAvecValeur(x);
     }
     creerZero(): Nat{
         return new Zero();
     }
     creerSuccesseur(arg: Nat): Nat{
-        return NatParInt.FAB.creerNatAvecValeur(1);
+        //return NatParInt.FAB.creerSuccesseur(arg);
+        return Succ.FAB.creerSuccesseur(arg);
     }
     zero(): Nat{
         return Zero.FAB.creerZero();
@@ -45,13 +47,16 @@ export class Zero implements Nat{
         return NatParInt.FAB.creerNatAvecValeur(x.val());
     }
     un(): Nat{
-        return this.creerSuccesseur(this.zero());
+        return NatParInt.FAB.creerNatAvecValeur(1);
     }
     produit(x: Nat): Nat{
         return Zero.FAB.creerZero();
     }
     equals(o: object): boolean{
-        return (o instanceof Zero) ?  true : false;
+        if(!(o instanceof Zero)) 
+            return false;
+        let n: Nat = o;
+		return this.val() === n.val();
     }
     modulo(arg: Nat): Nat{        
         if(arg.val() == 0)

@@ -1,114 +1,99 @@
-// En construction //
-
+import { FabriqueNat } from "./FabriqueNat";
 import { Nat } from "./Nat";
+import { FormatNatDecimal } from './FormatNatDecimal';
 import { Zero } from './Zero';
+import { Succ } from './Succ';
+import { NatParInt } from './NatParInt';
 
 export class NatDecimal implements Nat {
-	
-	private DIX: Nat;
+	// Attribut //
+	public static readonly   FAB: FabriqueNat<Nat> = new NatDecimal("1");
+	private static readonly DIX: Nat;
 
-	private chiffres: string;
-    
-	constructor(rep: string) {
-        let min: string = String(0);
-		let max: string = String(9);
-		for(let i: number = 0; i < rep.length; i++){
-			let c: string = rep.charAt(i);
-			if(c < min)	throw new Error("Le paramètre passé n'est pas un nombre");
-			if(c > max) throw new Error("Le paramètre passé n'est pas un nombre");
-		}
-		this.chiffres = rep;
-    }
-	
-	creerNatAvecValeur(x: number): Nat{
-
+	// Constructeur //
+    constructor(private _chiffres: string) {
+        if (!parseInt(_chiffres))
+            throw new Error("représentation non décimale")
 	}
-
+	
+	// Méthodes //	
+	creerNatAvecValeur(x: number): Nat{
+		return NatParInt.FAB.creerNatAvecRepresentation(this._chiffres)
+	}
 	static nettoyer(StringBuilder){
 
 	}
-
 	creerNatAvecRepresentation(chiffres: string): Nat{
-
+		return new NatDecimal(chiffres);
 	}
-
 	creerZero(): Nat{
-
+		return new Zero();
 	}
-
 	creerSuccesseur(arg: Nat): Nat{
-
-	}
-
-    chiffre(i: number): number{
-    	if(i < this.taille())
-    		return Character.getNumericValue(chiffres.charAt(chiffres.length() -1 -i));
-    	return 0;
+		return new Succ(arg);
+	}   
+    chiffre(i: number): number {
+        if (i < this.taille())
+            return parseInt(this._chiffres.charAt(this.taille() - 1 - i));
+        return 0;
     }
-
-	taille(): number{
-    	return this.chiffres.length;
-	}
-	    
+    taille(): number {
+        return this._chiffres.length;
+    }
     toString(): string {
-    	return this.chiffres;
-    }
-    
+    	return this._chiffres;
+    } 
+    representationJSON(): FormatNatDecimal {
+        return {
+            chiffres: this._chiffres
+        };
+	}   
     val(): number {
-		return parseInt(this.chiffres);
-	}
-	
+		return parseInt(this._chiffres);
+	}	
 	estNull(): boolean{
 		return false;
 	}
-
 	predecesseur(): Nat{
-
+		
 	}
-
     equals(x: object): boolean{
-		/*
-		if(!(x instanceof NatParInt)) return false;
+		if(!(x instanceof NatParInt)) 
+			return false;
         let n: Nat = x;
-		return this.getInt() == n.getInt();
-		*/
-		throw new Error("Méthode en construction");
+		return this.val() == n.val();
 	}
-
-	somme(x: Nat): Nat {
-        let t: number = this.taille() < x.taille() ? x.taille() : this.taille();
-        var rep: string = "";
-		let retenue: number = 0;
-		for(let i: number = 0; i < t; i++){
-			let chiffre: number = this.chiffre(i) + x.chiffre(i) + retenue;
-			if(chiffre > 9){
-				chiffre = chiffre - 10;
-				retenue = 1;
-			}else{
-				retenue = 0;
-			}
-			rep = rep.concat(chiffre.toString());
-		}
-		rep = retenue == 0 ? rep : rep + "1";
-		return new NatDecimal(rep.split('').reverse().join(''))
-	}
-
+    somme(x: NatDecimal): NatDecimal {
+        const t = this.taille() < x.taille() ? x.taille() : this.taille();
+        const rep: string[] = [];
+        let retenue = 0;
+        for (let i = 0; i < t; i++) {
+            let chiffre = this.chiffre(i) + x.chiffre(i) + retenue;
+            if (chiffre > 9) {
+                chiffre = chiffre - 10;
+                retenue = 1;
+            } else {
+                retenue = 0;
+            }
+            rep.push(chiffre.toString());
+        }
+        if (retenue !== 0) {
+            rep.push("1");
+        }
+        return new NatDecimal(rep.reverse().join(""));
+    } 
 	zero(): Nat{
 		return new Zero();
 	}
-
 	produit(arg: Nat): Nat{
 		
 	}
-
 	un(): Nat{
 
 	}
-
 	modulo(arg: Nat): Nat{
 
 	}
-
 	div(arg: Nat): Nat{
 
 	}

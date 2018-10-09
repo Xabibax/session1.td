@@ -1,48 +1,56 @@
-import { Nat } from './Nat';
-import { NatParInt } from './NatParInt';
-//import { NatDecimal } from './NatDecimal';
-import { FabriqueNat } from "./FabriqueNat";
 
-function main() {
-    /*
-    x: Nat = NatDecimal.FAB.creerUnValeurParRepresentation("75");
-    System.out.println("150 ? " + x.somme(x));
-    
-    x = new NatDecimal("2000000000");
-    System.out.println("4000000000 ? " + x.somme(x));
-    */
-    
-    let x: Nat = NatParInt.FAB.creerNatAvecValeur(85);
-    console.log("170 ? " + x.somme(x));
-    
-    /*
-    Nat y = new NatDecimal("45");
-    System.out.println("130 ? " + x.somme(y));
-    
-    y = new NatDecimal("55");
-    System.out.println("140 ? " + y.somme(x));
-    */
-    
-    try{
-        x = NatParInt.FAB.creerNatAvecValeur(2_000_000_000);
-        console.log("4_000_000_000 ? " + x.somme(x));
-    }
-    catch(e){
-        console.log("Erreur : dépassement ! Trace :");
-        console.log(e.toString());
-    }
-    test(NatParInt.FAB);
-    /*
-    test(NatDecimal.FAB);
-    */
+import { NatParInt,
+} from "./NatParInt";
+/*
+import { NatDecimal
+} from './NatDecimal';
+*/
+
+/*
+let x = new NatDecimal("75");
+let unD = new NatDecimal("1");
+console.log("150 ? " + x.somme(x).toString());
+x = new NatDecimal("9999999999999999");
+console.log("10000000000000000 ? " + x.somme(unD).toString());
+*/
+
+let y = new NatParInt(85);
+let un = new NatParInt(1);
+console.log("170 ? " + y.somme(y).toString());
+y = new NatParInt(9999999999999999);
+console.log(y);
+console.log(y.somme(un).val() === y.val());
+/*
+try {
+    let z = new NatDecimal("aze");
+    console.log(z.toString());
+} catch (e) {
+    console.log("!!! erreur !!!");
 }
+*/
 
-function test(fab: FabriqueNat<Nat>) {
-    let x: Nat = fab.creerNatAvecRepresentation("75");
-    console.log("150 ? " + x.somme(x));
-    
-    x = fab.creerNatAvecValeur(2000000000);
-    console.log("4000000000 ? " + x.somme(x));
+/*
+type Nat = NatParInt | NatDecimal;
+// Calculs sur les types réalisés par le compilateur de Typescript
+// Pour examiner le type attribué à n, taper 'n' pour observer son type.
+// Voir les commentaires.
+let n: Nat = unD; // n : NatDecimal
+n = un; // n : NatParInt
+n = unD; // n : NatDecimal
+let z = 3;
+if (z < 4) {
+    n = un; // n : NatParInt
+} else {
+    n = unD; // n : NatDecimal
 }
-
-main();
+*/
+// n : Nat
+/*
+console.log(n.toStringJSON());
+// n.toStringJSON() : FormatNatParInt | FormatNatDecimal
+if (n instanceof NatParInt) {
+    console.log(n.toStringJSON()); // n : NatParInt
+} else {
+    console.log(n.toStringJSON()); // n : NatDecimal
+}
+*/

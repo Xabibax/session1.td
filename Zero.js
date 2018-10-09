@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+var Succ_1 = require("./Succ");
 var NatParInt_1 = require("./NatParInt");
 var Zero = /** @class */ (function () {
     // Constructeur //
@@ -22,16 +23,17 @@ var Zero = /** @class */ (function () {
         return 1;
     };
     Zero.prototype.creerNatAvecRepresentation = function (chiffres) {
-        return Zero.FAB.creerZero();
+        return NatParInt_1.NatParInt.FAB.creerNatAvecRepresentation(chiffres);
     };
     Zero.prototype.creerNatAvecValeur = function (x) {
-        return Zero.FAB.creerZero();
+        return NatParInt_1.NatParInt.FAB.creerNatAvecValeur(x);
     };
     Zero.prototype.creerZero = function () {
         return new Zero();
     };
     Zero.prototype.creerSuccesseur = function (arg) {
-        return NatParInt_1.NatParInt.FAB.creerNatAvecValeur(1);
+        //return NatParInt.FAB.creerSuccesseur(arg);
+        return Succ_1.Succ.FAB.creerSuccesseur(arg);
     };
     Zero.prototype.zero = function () {
         return Zero.FAB.creerZero();
@@ -40,13 +42,16 @@ var Zero = /** @class */ (function () {
         return NatParInt_1.NatParInt.FAB.creerNatAvecValeur(x.val());
     };
     Zero.prototype.un = function () {
-        return this.creerSuccesseur(this.zero());
+        return NatParInt_1.NatParInt.FAB.creerNatAvecValeur(1);
     };
     Zero.prototype.produit = function (x) {
         return Zero.FAB.creerZero();
     };
     Zero.prototype.equals = function (o) {
-        return (o instanceof Zero) ? true : false;
+        if (!(o instanceof Zero))
+            return false;
+        var n = o;
+        return this.val() === n.val();
     };
     Zero.prototype.modulo = function (arg) {
         if (arg.val() == 0)

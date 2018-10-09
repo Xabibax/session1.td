@@ -5,17 +5,17 @@ import { Zero } from './Zero';
 
 export class Succ implements Nat{
     // Attributs //
-    static FAB: FabriqueNat<Nat> = new Succ(NatParInt.FAB.creerNatAvecValeur(1));
+    static FAB: FabriqueNat<Nat> = new Succ(new Zero());
     private _predecesseur: Nat;
 
     // Constructeur //
     constructor(arg: Nat){
-        this._predecesseur = arg.predecesseur();
+        this._predecesseur = arg;
     }
 
     // Méthodes //
     val(): number{
-        return this.un().somme(this._predecesseur).val();
+        return this._predecesseur.somme(this.un()).val();
     }
     estNull(): boolean{
         return false;
@@ -36,7 +36,7 @@ export class Succ implements Nat{
         return Zero.FAB.creerZero()
     }
     creerSuccesseur(arg: Nat): Nat{
-        return NatParInt.FAB.creerNatAvecValeur(arg.somme(this.un()).val());
+        return new Succ(arg);
     }
     creerNatAvecRepresentation(chiffres: string): Nat{
         return NatParInt.FAB.creerNatAvecRepresentation(chiffres)
@@ -45,26 +45,28 @@ export class Succ implements Nat{
         return this.creerZero();
     }
     somme(arg: Nat): Nat{
-        return NatParInt.FAB.creerNatAvecValeur(
-            this._predecesseur.val()
-        ).somme(arg).somme(this.un())            
+        return NatParInt.FAB.creerNatAvecValeur(this.val()).somme(arg);           
     }
     un(): Nat{
         return NatParInt.FAB.creerNatAvecValeur(1);
     }
-    produit(arg: Nat): nat{
-
+    produit(arg: Nat): Nat{
+        return NatParInt.FAB.creerNatAvecValeur(this.val()).produit(arg);        
     }
-    equals(o: object): boolean{
-
+    equals(o: object): boolean{		
+        if(!(o instanceof Succ)) 
+            return false;
+        let n: Nat = o;
+		return this.val() === n.val();
     }
     modulo(arg: Nat): Nat{
+        return NatParInt.FAB.creerNatAvecValeur(this.val()).modulo(arg); 
 
     }
     div(arg: Nat): Nat{
-
+        return NatParInt.FAB.creerNatAvecValeur(this.val()).div(arg); 
     }
     toString(): string{
-        
+        return this.val().toString();
     }
 }

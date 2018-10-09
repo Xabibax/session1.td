@@ -1,19 +1,20 @@
-// En construction //
+import { FormatNatParInt } from './FormatNatParInt';
+import { FabriqueNat } from './FabriqueNat';
 import { Nat } from './Nat';
 import { Zero } from './Zero';
-import { FabriqueNat } from './FabriqueNat';
+//import { Succ } from './Succ';
 
 export class NatParInt implements Nat {
     // Attributs //
 	public static FAB: FabriqueNat<Nat> = new NatParInt(1);
-	private _val: number;
 
-    // Constructeur //
-	constructor(i: number) {
-		if(i < 0)
-			throw new Error('The number is negative.');
-        this._val = i;
-    }	
+	// Constructeur //
+	constructor(private _val: number) {
+        if (_val < 0)
+            throw new Error("nombre négatif");
+        if (_val !== Math.floor(_val))
+            throw new Error("nombre non entier");
+	}
     
     // Méthodes //
 	creerNatAvecValeur(x: number): Nat{
@@ -23,10 +24,11 @@ export class NatParInt implements Nat {
         return Zero.FAB.creerZero();
 	}
 	creerSuccesseur(arg: Nat): Nat{
-        return NatParInt.FAB.creerNatAvecValeur(this.somme(this.un()).val());
+		return new NatParInt(arg.val() + 1);
+        //return Succ.FAB.creerSuccesseur(arg);
 	}
 	creerNatAvecRepresentation(chiffres: string): Nat{
-		return NatParInt.FAB.creerNatAvecValeur(parseInt(chiffres));
+		return new NatParInt(parseInt(chiffres));
 	}
     val(): number{
 		return this._val;
@@ -38,10 +40,10 @@ export class NatParInt implements Nat {
         return NatParInt.FAB.creerNatAvecValeur(this.val() - 1);
     }  	 
     chiffre(i: number): number {
-		return (i == 0) ? this.val()%10 : (new NatParInt(this.val()/10)).chiffre(i-1);
+		return (i === 0) ? this.val()%10 : (NatParInt.FAB.creerNatAvecValeur(this.val()/10)).chiffre(i-1);
     }  
     taille(): number {
-		return (this.val() < 10) ? 1 : 1 + (new NatParInt(this.val() / 10)).taille();
+		return (this.val() < 10) ? 1 : 1 + (NatParInt.FAB.creerNatAvecValeur(this.val() / 10)).taille();
     }   
 	zero(): Nat{
         return this.creerZero();
@@ -53,47 +55,26 @@ export class NatParInt implements Nat {
         return NatParInt.FAB.creerNatAvecValeur(1);
 	}
 	produit(arg: Nat): Nat{
-        if(arg.val() > 0)
-            return NatParInt.FAB.creerNatAvecValeur(
-				this.somme(
-					this.produit(
-						NatParInt.FAB.creerNatAvecValeur(arg.predecesseur().val())
-					)
-				).val()
-			);
-        return this.creerZero();
-
+        return NatParInt.FAB.creerNatAvecValeur(this.val() * arg.val());
 	}
 	toString(): string {
 		return this.val().toString();
+	}
+	toJSON(): FormatNatParInt {
+        return {
+            val: this._val
+        };
 	}
 	equals(o: object): boolean{		
         if(!(o instanceof NatParInt)) 
             return false;
         let n: Nat = o;
-		return this.val() == n.val();		
+		return this.val() === n.val();		
 	}
 	modulo(arg: Nat): Nat{
-		if(arg.val() == 0)
-            throw new Error("Can't modulo by zero");
-        if(this.val() >= arg.val())
-        	return NatParInt.FAB.creerNatAvecValeur(
-				NatParInt.FAB.creerNatAvecValeur(this.val() - arg.val()).modulo(
-					arg
-				).val()
-			);
-		return NatParInt.FAB.creerNatAvecValeur(this.val());
+		return NatParInt.FAB.creerNatAvecValeur(this.val() % arg.val());
 	}
 	div(arg: Nat): Nat{
-		if(arg.val() == 0)
-				throw new Error("Can't dive by Zero");
-        if(this.val() >= arg.val())
-            return NatParInt.FAB.creerNatAvecValeur(
-				this.un().somme(
-					NatParInt.FAB.creerNatAvecValeur(this.val() - arg.val()).div(
-						arg)
-					).val()
-			);
-		return this.zero();
+		return NatParInt.FAB.creerNatAvecValeur(this.val() / arg.val());
 	}
 }

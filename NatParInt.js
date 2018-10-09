@@ -1,6 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var Zero_1 = require("./Zero");
+//import { Succ } from './Succ';
 var NatParInt = /** @class */ (function () {
     // Constructeur //
     function NatParInt(i) {
@@ -16,10 +17,11 @@ var NatParInt = /** @class */ (function () {
         return Zero_1.Zero.FAB.creerZero();
     };
     NatParInt.prototype.creerSuccesseur = function (arg) {
-        return NatParInt.FAB.creerNatAvecValeur(this.somme(this.un()).val());
+        return new NatParInt(arg.val() + 1);
+        //return Succ.FAB.creerSuccesseur(arg);
     };
     NatParInt.prototype.creerNatAvecRepresentation = function (chiffres) {
-        return NatParInt.FAB.creerNatAvecValeur(parseInt(chiffres));
+        return new NatParInt(parseInt(chiffres));
     };
     NatParInt.prototype.val = function () {
         return this._val;
@@ -31,10 +33,10 @@ var NatParInt = /** @class */ (function () {
         return NatParInt.FAB.creerNatAvecValeur(this.val() - 1);
     };
     NatParInt.prototype.chiffre = function (i) {
-        return (i == 0) ? this.val() % 10 : (new NatParInt(this.val() / 10)).chiffre(i - 1);
+        return (i === 0) ? this.val() % 10 : (NatParInt.FAB.creerNatAvecValeur(this.val() / 10)).chiffre(i - 1);
     };
     NatParInt.prototype.taille = function () {
-        return (this.val() < 10) ? 1 : 1 + (new NatParInt(this.val() / 10)).taille();
+        return (this.val() < 10) ? 1 : 1 + (NatParInt.FAB.creerNatAvecValeur(this.val() / 10)).taille();
     };
     NatParInt.prototype.zero = function () {
         return this.creerZero();
@@ -46,32 +48,27 @@ var NatParInt = /** @class */ (function () {
         return NatParInt.FAB.creerNatAvecValeur(1);
     };
     NatParInt.prototype.produit = function (arg) {
-        if (arg.val() > 0)
-            return NatParInt.FAB.creerNatAvecValeur(this.somme(this.produit(NatParInt.FAB.creerNatAvecValeur(arg.predecesseur().val()))).val());
-        return this.creerZero();
+        return NatParInt.FAB.creerNatAvecValeur(this.val() * arg.val());
     };
     NatParInt.prototype.toString = function () {
         return this.val().toString();
+    };
+    NatParInt.prototype.toJSON = function () {
+        return {
+            val: this._val
+        };
     };
     NatParInt.prototype.equals = function (o) {
         if (!(o instanceof NatParInt))
             return false;
         var n = o;
-        return this.val() == n.val();
+        return this.val() === n.val();
     };
     NatParInt.prototype.modulo = function (arg) {
-        if (arg.val() == 0)
-            throw new Error("Can't modulo by zero");
-        if (this.val() >= arg.val())
-            return NatParInt.FAB.creerNatAvecValeur(NatParInt.FAB.creerNatAvecValeur(this.val() - arg.val()).modulo(arg).val());
-        return NatParInt.FAB.creerNatAvecValeur(this.val());
+        return NatParInt.FAB.creerNatAvecValeur(this.val() % arg.val());
     };
     NatParInt.prototype.div = function (arg) {
-        if (arg.val() == 0)
-            throw new Error("Can't dive by Zero");
-        if (this.val() >= arg.val())
-            return NatParInt.FAB.creerNatAvecValeur(this.un().somme(NatParInt.FAB.creerNatAvecValeur(this.val() - arg.val()).div(arg)).val());
-        return this.zero();
+        return NatParInt.FAB.creerNatAvecValeur(this.val() / arg.val());
     };
     // Attributs //
     NatParInt.FAB = new NatParInt(1);
